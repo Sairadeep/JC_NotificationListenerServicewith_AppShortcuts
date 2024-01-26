@@ -150,7 +150,6 @@ fun JCNLS() {
                                                 .toString()
                                         }
 
-
                                         1 -> NotificationService.Utils.getWhatsAppBadgeCount()
                                             .toString()
 
@@ -169,7 +168,6 @@ fun JCNLS() {
                                         else -> textOnNotified.value = true
                                     }
 
-                                    // if(index == 1) textOnBadge.value = badgeCount else textOnBadge.value = "8"
                                     BadgedBox(
                                         badge = {
                                             Text(
