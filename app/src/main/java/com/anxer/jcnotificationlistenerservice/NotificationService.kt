@@ -1,5 +1,6 @@
 package com.anxer.jcnotificationlistenerservice
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
@@ -9,10 +10,25 @@ import androidx.compose.runtime.mutableIntStateOf
 
 class NotificationService : NotificationListenerService() {
 
-   // private lateinit var sharedPreferences: SharedPreferences
+    // private lateinit var sharedPreferences: SharedPreferences
 
+    //private val packManager: PackageManager by lazy { getSystemService(packageName) as PackageManager }
+
+
+    @SuppressLint("QueryPermissionsNeeded")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
+
+        /*Log.d("I'mPM", (packManager.getApplicationIcon("com.instagram.android")).toString())
+
+        packManager.getInstalledPackages(android.content.pm.PackageManager.FLAG_PERMISSION_WHITELIST_SYSTEM)
+
+        Log.d(
+            "I'mPM",
+            packManager.getInstalledApplications(android.content.pm.PackageManager.FLAG_PERMISSION_WHITELIST_SYSTEM)
+                .toString()
+        )*/
+
         when (sbn.packageName) {
             "com.instagram.android" -> {
                 Utils.setInstaBadgeCount(sbn.packageName.length)
@@ -50,9 +66,8 @@ class NotificationService : NotificationListenerService() {
                 //saveNotificationCount()
             }
         }
-
-
     }
+
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         when (sbn.packageName) {
@@ -74,13 +89,12 @@ class NotificationService : NotificationListenerService() {
                 //saveNotificationCount()
             }
 
-            "com.google.android.apps.messaging" ->
-                {
-                    Utils.setMessageAppBadgeCount((Utils.getMessageAppBadgeCount()) - 1)
-                    Log.d(
-                        "Notification_Removed_FromMessaging",
-                        "Removed app: ${sbn.packageName} notification and current badgeCount: ${Utils.getMessageAppBadgeCount()}"
-                    )
+            "com.google.android.apps.messaging" -> {
+                Utils.setMessageAppBadgeCount((Utils.getMessageAppBadgeCount()) - 1)
+                Log.d(
+                    "Notification_Removed_FromMessaging",
+                    "Removed app: ${sbn.packageName} notification and current badgeCount: ${Utils.getMessageAppBadgeCount()}"
+                )
             }
 
             else -> {
@@ -133,30 +147,30 @@ class NotificationService : NotificationListenerService() {
         }
     }
 
-   /* private fun saveNotificationCount() {
-        sharedPreferences = this.getSharedPreferences(
-            "Save_Notification_Count",
-            MODE_PRIVATE
-        )
-        val editor = sharedPreferences.edit()
+    /* private fun saveNotificationCount() {
+         sharedPreferences = this.getSharedPreferences(
+             "Save_Notification_Count",
+             MODE_PRIVATE
+         )
+         val editor = sharedPreferences.edit()
 
-        editor.putInt(
-            "instaBadgeCount",
-            Utils.getInstaBadgeCount()
-        )
+         editor.putInt(
+             "instaBadgeCount",
+             Utils.getInstaBadgeCount()
+         )
 
-        editor.putInt(
-            "whatsAppBadgeCount",
-            Utils.getWhatsAppBadgeCount()
-        )
+         editor.putInt(
+             "whatsAppBadgeCount",
+             Utils.getWhatsAppBadgeCount()
+         )
 
-        editor.putInt(
-            "otherAppBadgeCount",
-            Utils.getOtherAppBadgeCount()
-        )
+         editor.putInt(
+             "otherAppBadgeCount",
+             Utils.getOtherAppBadgeCount()
+         )
 
-        editor.apply()
+         editor.apply()
 
-        Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show()
-    }*/
+         Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show()
+     }*/
 }

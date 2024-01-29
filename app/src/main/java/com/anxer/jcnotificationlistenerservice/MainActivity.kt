@@ -41,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -74,6 +73,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     JCNLS()
+                    Shortcut(this)
                 }
             }
         }
@@ -92,7 +92,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 fun JCNLS() {
 
-    val myContext = LocalContext.current
     val notifiedAppDetails = appDetails()
     val textOnNotified = remember { mutableStateOf(false) }
 
@@ -142,10 +141,10 @@ fun JCNLS() {
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-
                                 Row {
+                                   // val packM = LocalContext.current.packageManager.getApplicationIcon("com.anxer.jcnotificationlistenerservice").
                                     Image(
-                                        painter = painterResource(id = nta.appIcon),
+                                        painter = painterResource(id = (nta.appIcon)),
                                         contentDescription = nta.appName,
                                         modifier = Modifier.size(80.dp),
                                         contentScale = ContentScale.Crop,
@@ -204,7 +203,10 @@ fun JCNLS() {
         },
         containerColor = colorResource(id = R.color.black)
     )
+}
 
+@Composable
+private fun Shortcut(myContext: Context) {
     val shortCut = ShortcutInfoCompat.Builder(myContext, "shortCut1")
         .setShortLabel("Open Browser")
         .setLongLabel("JC Navigation Listener Service with a shortcut")
@@ -217,7 +219,7 @@ fun JCNLS() {
             )
         ).build()
 
-    /*val shortCut2 = ShortcutInfoCompat.Builder(myContext, "shortCut1")
+   /* val shortCut2 = ShortcutInfoCompat.Builder(myContext, "shortCut1")
         .setShortLabel("Open Browser")
         .setLongLabel("JC Navigation Listener Service with a shortcut")
         .setIcon(
@@ -229,10 +231,8 @@ fun JCNLS() {
             )
         ).build() */
 
-    // val shortcuts = mutableListOf(shortCut,shortCut2)
-
     ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut)
-    // ShortcutManagerCompat.setDynamicShortcuts(myContext,shortcuts)
+    // ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut2)
     Log.d(
         "ShortCutCount",
         ShortcutManagerCompat.getMaxShortcutCountPerActivity(myContext).toString()
