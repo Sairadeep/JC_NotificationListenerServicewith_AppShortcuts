@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -209,9 +210,33 @@ fun JCNLS() {
         .setLongLabel("JC Navigation Listener Service with a shortcut")
         .setIcon(
             IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
-        ).setIntent(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Sairadeep?tab=repositories"))).build()
+        ).setIntent(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/Sairadeep?tab=repositories")
+            )
+        ).build()
+
+    /*val shortCut2 = ShortcutInfoCompat.Builder(myContext, "shortCut1")
+        .setShortLabel("Open Browser")
+        .setLongLabel("JC Navigation Listener Service with a shortcut")
+        .setIcon(
+            IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
+        ).setIntent(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/Sairadeep?tab=repositories")
+            )
+        ).build() */
+
+    // val shortcuts = mutableListOf(shortCut,shortCut2)
 
     ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut)
+    // ShortcutManagerCompat.setDynamicShortcuts(myContext,shortcuts)
+    Log.d(
+        "ShortCutCount",
+        ShortcutManagerCompat.getMaxShortcutCountPerActivity(myContext).toString()
+    )
 }
 
 
