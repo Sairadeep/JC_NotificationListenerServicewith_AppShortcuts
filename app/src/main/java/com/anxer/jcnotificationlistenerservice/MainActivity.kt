@@ -3,6 +3,7 @@ package com.anxer.jcnotificationlistenerservice
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -39,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -46,6 +48,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.anxer.jcnotificationlistenerservice.ui.theme.JCNotificationListenerServiceTheme
 
 class MainActivity : ComponentActivity() {
@@ -57,7 +62,7 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         val isPermissionGranted = checkNotificationListenerPermission(this, listenerComponent)
 
         setContent {
@@ -86,6 +91,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 fun JCNLS() {
 
+    val myContext = LocalContext.current
     val notifiedAppDetails = appDetails()
     val textOnNotified = remember { mutableStateOf(false) }
 
@@ -197,6 +203,15 @@ fun JCNLS() {
         },
         containerColor = colorResource(id = R.color.black)
     )
+
+    val shortCut = ShortcutInfoCompat.Builder(myContext, "shortCut1")
+        .setShortLabel("Open Browser")
+        .setLongLabel("JC Navigation Listener Service with a shortcut")
+        .setIcon(
+            IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
+        ).setIntent(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Sairadeep?tab=repositories"))).build()
+
+    ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut)
 }
 
 
