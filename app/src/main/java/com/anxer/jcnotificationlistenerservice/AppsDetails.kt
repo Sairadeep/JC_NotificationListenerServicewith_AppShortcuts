@@ -8,13 +8,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 @Composable
 fun appDetails(): SnapshotStateList<AppsList> {
 
-    /*  val packM =
-             LocalContext.current.packageManager?.getApplicationIcon("com.anxer.jcnotificationlistenerservice")
-         Log.d("IconReceived", packM.toString())
-
-     // val id: Int = Integer.parseInt(packM.toString()) */
-
-
     val appNotificationDetails = remember {
         mutableStateListOf(
             AppsList(

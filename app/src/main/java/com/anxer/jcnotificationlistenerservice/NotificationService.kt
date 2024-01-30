@@ -10,37 +10,24 @@ import androidx.compose.runtime.mutableIntStateOf
 
 class NotificationService : NotificationListenerService() {
 
-    // private lateinit var sharedPreferences: SharedPreferences
-
-    //private val packManager: PackageManager by lazy { getSystemService(packageName) as PackageManager }
-
+    // val notificationManager : NotificationManager by lazy { getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
 
     @SuppressLint("QueryPermissionsNeeded")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
-        /*Log.d("I'mPM", (packManager.getApplicationIcon("com.instagram.android")).toString())
-
-        packManager.getInstalledPackages(android.content.pm.PackageManager.FLAG_PERMISSION_WHITELIST_SYSTEM)
-
-        Log.d(
-            "I'mPM",
-            packManager.getInstalledApplications(android.content.pm.PackageManager.FLAG_PERMISSION_WHITELIST_SYSTEM)
-                .toString()
-        )*/
-
         when (sbn.packageName) {
             "com.instagram.android" -> {
-                Utils.setInstaBadgeCount(sbn.packageName.length)
-                Log.d(
-                    "Notification_PostedBy_Instagram",
-                    "Package Name: ${sbn.packageName} and current badgeCount: ${Utils.getInstaBadgeCount()}"
-                )
-                //saveNotificationCount()
+                    Utils.setInstaBadgeCount(sbn.notification.number)
+                    Log.d(
+                        "Notification_PostedBy_Instagram",
+                        "Package Name: ${sbn.packageName} and current badgeCount: ${Utils.getInstaBadgeCount()}"
+                    )
+                    //saveNotificationCount()
             }
 
             "com.whatsapp" -> {
-                Utils.setWhatsAppBadgeCount(sbn.packageName.length)
+                Utils.setWhatsAppBadgeCount(sbn.notification.number)
                 Log.d(
                     "Notification_PostedBy_WhatsApp",
                     "Package Name: ${sbn.packageName} and current badgeCount: ${Utils.getWhatsAppBadgeCount()}"
@@ -49,7 +36,7 @@ class NotificationService : NotificationListenerService() {
             }
 
             "com.google.android.apps.messaging" -> {
-                Utils.setMessageAppBadgeCount(sbn.packageName.length)
+                Utils.setMessageAppBadgeCount(sbn.notification.number)
                 Log.d(
                     "Notification_PostedBy_MessageApp",
                     "Package Name: ${sbn.packageName} and current badgeCount: ${Utils.getMessageAppBadgeCount()}"
@@ -72,7 +59,7 @@ class NotificationService : NotificationListenerService() {
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         when (sbn.packageName) {
             "com.instagram.android" -> {
-                Utils.setInstaBadgeCount((Utils.getInstaBadgeCount()) - 1)
+                Utils.setInstaBadgeCount(0)
                 Log.d(
                     "Notification_Removed_FromInstagram",
                     "Removed app: ${sbn.packageName} notification and current badgeCount: ${Utils.getInstaBadgeCount()}"
@@ -81,7 +68,7 @@ class NotificationService : NotificationListenerService() {
             }
 
             "com.whatsapp" -> {
-                Utils.setWhatsAppBadgeCount((Utils.getWhatsAppBadgeCount()) - 1)
+                Utils.setWhatsAppBadgeCount(0)
                 Log.d(
                     "Notification_Removed_FromWhatsApp",
                     "Removed app: ${sbn.packageName} notification and current badgeCount: ${Utils.getWhatsAppBadgeCount()}"
@@ -90,7 +77,7 @@ class NotificationService : NotificationListenerService() {
             }
 
             "com.google.android.apps.messaging" -> {
-                Utils.setMessageAppBadgeCount((Utils.getMessageAppBadgeCount()) - 1)
+                Utils.setMessageAppBadgeCount(0)
                 Log.d(
                     "Notification_Removed_FromMessaging",
                     "Removed app: ${sbn.packageName} notification and current badgeCount: ${Utils.getMessageAppBadgeCount()}"
@@ -98,7 +85,7 @@ class NotificationService : NotificationListenerService() {
             }
 
             else -> {
-                Utils.setOtherAppBadgeCount(Utils.getOtherAppBadgeCount() - 1)
+                Utils.setOtherAppBadgeCount(0)
                 Log.d(
                     "Notification_Removed_FromOthers",
                     "Removed app name: ${sbn.packageName} and current badgeCount: ${Utils.getOtherAppBadgeCount()}"

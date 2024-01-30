@@ -141,10 +141,10 @@ fun JCNLS() {
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Row {
-                                   // val packM = LocalContext.current.packageManager.getApplicationIcon("com.anxer.jcnotificationlistenerservice").
+                                Row {                                    
                                     Image(
-                                        painter = painterResource(id = (nta.appIcon)),
+                                        painter = painterResource(id = nta.appIcon),
+                                        // painterResource(id = nta.appIcon),
                                         contentDescription = nta.appName,
                                         modifier = Modifier.size(80.dp),
                                         contentScale = ContentScale.Crop,
@@ -219,17 +219,17 @@ private fun Shortcut(myContext: Context) {
             )
         ).build()
 
-   /* val shortCut2 = ShortcutInfoCompat.Builder(myContext, "shortCut1")
-        .setShortLabel("Open Browser")
-        .setLongLabel("JC Navigation Listener Service with a shortcut")
-        .setIcon(
-            IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
-        ).setIntent(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://github.com/Sairadeep?tab=repositories")
-            )
-        ).build() */
+    /* val shortCut2 = ShortcutInfoCompat.Builder(myContext, "shortCut1")
+         .setShortLabel("Open Browser")
+         .setLongLabel("JC Navigation Listener Service with a shortcut")
+         .setIcon(
+             IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
+         ).setIntent(
+             Intent(
+                 Intent.ACTION_VIEW,
+                 Uri.parse("https://github.com/Sairadeep?tab=repositories")
+             )
+         ).build() */
 
     ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut)
     // ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut2)
