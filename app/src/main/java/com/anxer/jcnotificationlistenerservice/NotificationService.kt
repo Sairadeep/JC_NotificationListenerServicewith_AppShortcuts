@@ -9,16 +9,25 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableIntStateOf
 
 class NotificationService : NotificationListenerService() {
+
+    // private lateinit var sharedPreferences: SharedPreferences
+
     @SuppressLint("QueryPermissionsNeeded")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
+
+        // saveNotificationCount()
 
         when (sbn.packageName) {
             this.getString(R.string.insta_app_package) -> {
                 Utils.setInstaBadgeCount(sbn.notification.number)
                 Log.d(
                     this.getString(R.string.notification_posted_log),
-                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${this.getString(R.string.notification_badge_Count)} ${Utils.getInstaBadgeCount()}"
+                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${
+                        this.getString(
+                            R.string.notification_badge_Count
+                        )
+                    } ${Utils.getInstaBadgeCount()}"
                 )
             }
 
@@ -26,7 +35,11 @@ class NotificationService : NotificationListenerService() {
                 Utils.setWhatsAppBadgeCount(sbn.notification.number)
                 Log.d(
                     this.getString(R.string.notification_posted_log),
-                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${this.getString(R.string.notification_badge_Count)} ${Utils.getWhatsAppBadgeCount()}"
+                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${
+                        this.getString(
+                            R.string.notification_badge_Count
+                        )
+                    } ${Utils.getWhatsAppBadgeCount()}"
                 )
             }
 
@@ -34,7 +47,11 @@ class NotificationService : NotificationListenerService() {
                 Utils.setMessageAppBadgeCount(sbn.notification.number)
                 Log.d(
                     this.getString(R.string.notification_posted_log),
-                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${this.getString(R.string.notification_badge_Count)} ${Utils.getMessageAppBadgeCount()}"
+                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${
+                        this.getString(
+                            R.string.notification_badge_Count
+                        )
+                    } ${Utils.getMessageAppBadgeCount()}"
                 )
             }
 
@@ -42,14 +59,16 @@ class NotificationService : NotificationListenerService() {
                 Utils.setOtherAppBadgeCount(this.activeNotifications.size)
                 Log.d(
                     this.getString(R.string.notification_posted_log),
-                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${this.getString(R.string.notification_badge_Count)} ${Utils.getOtherAppBadgeCount()}"
+                    "${this.getString(R.string.notification_posted_app)} ${sbn.packageName} ${
+                        this.getString(
+                            R.string.notification_badge_Count
+                        )
+                    } ${Utils.getOtherAppBadgeCount()}"
                 )
             }
         }
     }
 
-
-    /*
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         when (sbn.packageName) {
             this.getString(R.string.insta_app_package) -> {
@@ -84,7 +103,7 @@ class NotificationService : NotificationListenerService() {
                 )
             }
         }
-    }*/
+    }
 
     object Utils {
 
@@ -125,4 +144,29 @@ class NotificationService : NotificationListenerService() {
             return otherAppBadgeCount.intValue
         }
     }
+
+    /*
+    private fun saveNotificationCount() {
+        sharedPreferences = this.getSharedPreferences(
+            "Save_Notification_Count",
+            MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putInt(
+            "instaBadgeCount",
+            Utils.getInstaBadgeCount()
+        )
+        editor.putInt(
+            "whatsAppBadgeCount",
+            Utils.getWhatsAppBadgeCount()
+        )
+        editor.putInt(
+            "otherAppBadgeCount",
+            Utils.getOtherAppBadgeCount()
+        )
+        editor.apply()
+
+        Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show()
+    }*/
+
 }
