@@ -3,11 +3,14 @@ package com.anxer.jcnotificationlistenerservice
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -40,9 +43,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,12 +57,13 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.anxer.jcnotificationlistenerservice.ui.theme.JCNotificationListenerServiceTheme
 
 class MainActivity : ComponentActivity() {
 
     private val listenerComponent =
-        ComponentName("com.anxer.jcnotificationlistenerservice", "NotificationService")
+        ComponentName("${R.string.my_app_package}", "NotificationService")
     private var permissionGranted = false
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -92,15 +99,22 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 fun JCNLS() {
 
+    val badgeCount = remember { mutableStateOf("Dummy") }
+    val aIBtoIB = remember {
+        mutableStateOf<ImageBitmap?>(null)
+    }
+    val myContext = LocalContext.current
     val notifiedAppDetails = appDetails()
     val textOnNotified = remember { mutableStateOf(false) }
+
+    Toast.makeText(myContext, myContext.getString(R.string.my_app_name), Toast.LENGTH_SHORT).show()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "JC Navigation Listener Service",
+                        text = stringResource(id = R.string.my_app_name),
                         fontSize = 20.sp,
                         color = Color.White
                     )
@@ -119,6 +133,8 @@ fun JCNLS() {
                     count = 4,
                     itemContent = { index ->
                         val nta = notifiedAppDetails[index]
+
+
                         Card(
                             modifier = Modifier
                                 .height(350.dp)
@@ -141,35 +157,51 @@ fun JCNLS() {
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Row {                                    
-                                    Image(
-                                        painter = painterResource(id = nta.appIcon),
-                                        // painterResource(id = nta.appIcon),
-                                        contentDescription = nta.appName,
-                                        modifier = Modifier.size(80.dp),
-                                        contentScale = ContentScale.Crop,
-                                        alignment = Alignment.Center
-                                    )
-                                    val badgeCount: String = when (index) {
+                                Row {
+                                    when (index) {
                                         0 -> {
-                                            NotificationService.Utils.getInstaBadgeCount()
-                                                .toString()
+                                            aIBtoIB.value =
+                                                imageFetchBitmap(myContext, nta.appPackage)
+                                            badgeCount.value =
+                                                NotificationService.Utils.getInstaBadgeCount()
+                                                    .toString()
                                         }
 
-                                        1 -> NotificationService.Utils.getWhatsAppBadgeCount()
-                                            .toString()
+                                        1 -> {
+                                            aIBtoIB.value =
+                                                imageFetchBitmap(myContext, nta.appPackage)
+                                            badgeCount.value =
+                                                NotificationService.Utils.getWhatsAppBadgeCount()
+                                                    .toString()
+                                        }
 
-                                        2 ->
-                                            NotificationService.Utils.getMessageAppBadgeCount()
-                                                .toString()
+                                        2 -> {
+                                            aIBtoIB.value =
+                                                imageFetchBitmap(myContext, nta.appPackage)
+                                            badgeCount.value =
+                                                NotificationService.Utils.getMessageAppBadgeCount()
+                                                    .toString()
+                                        }
 
-                                        else ->
-                                            NotificationService.Utils.getOtherAppBadgeCount()
-                                                .toString()
-
+                                        else -> {
+                                            aIBtoIB.value =
+                                                imageFetchBitmap(myContext, nta.appPackage)
+                                            badgeCount.value =
+                                                NotificationService.Utils.getOtherAppBadgeCount()
+                                                    .toString()
+                                        }
                                     }
 
-                                    when (badgeCount.toInt()) {
+                                    aIBtoIB.value?.let {
+                                        Image(
+                                            bitmap = it,
+                                            contentDescription = nta.appName,
+                                            modifier = Modifier.size(100.dp),
+                                            contentScale = ContentScale.Crop,
+                                            alignment = Alignment.Center
+                                        )
+                                    }
+                                    when (badgeCount.value.toInt()) {
                                         0 -> textOnNotified.value = false
                                         else -> textOnNotified.value = true
                                     }
@@ -177,7 +209,7 @@ fun JCNLS() {
                                     BadgedBox(
                                         badge = {
                                             Text(
-                                                text = badgeCount,
+                                                text = badgeCount.value,
                                                 textAlign = TextAlign.Right
                                             )
                                         }
@@ -208,8 +240,8 @@ fun JCNLS() {
 @Composable
 private fun Shortcut(myContext: Context) {
     val shortCut = ShortcutInfoCompat.Builder(myContext, "shortCut1")
-        .setShortLabel("Open Browser")
-        .setLongLabel("JC Navigation Listener Service with a shortcut")
+        .setShortLabel(stringResource(id = R.string.shortcut_shortLabel))
+        .setLongLabel(stringResource(id = R.string.shortcut_LongLabel))
         .setIcon(
             IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
         ).setIntent(
@@ -219,20 +251,7 @@ private fun Shortcut(myContext: Context) {
             )
         ).build()
 
-    /* val shortCut2 = ShortcutInfoCompat.Builder(myContext, "shortCut1")
-         .setShortLabel("Open Browser")
-         .setLongLabel("JC Navigation Listener Service with a shortcut")
-         .setIcon(
-             IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
-         ).setIntent(
-             Intent(
-                 Intent.ACTION_VIEW,
-                 Uri.parse("https://github.com/Sairadeep?tab=repositories")
-             )
-         ).build() */
-
     ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut)
-    // ShortcutManagerCompat.pushDynamicShortcut(myContext, shortCut2)
     Log.d(
         "ShortCutCount",
         ShortcutManagerCompat.getMaxShortcutCountPerActivity(myContext).toString()
@@ -246,5 +265,20 @@ fun checkNotificationListenerPermission(
 ): Boolean {
     return Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
         ?.contains(listenerComponent.flattenToString()) == true
+}
+
+fun imageFetchBitmap(context: Context, packName: String): ImageBitmap {
+    val packManager = context.packageManager
+    val appInfo = packManager.getApplicationInfo(
+        packName,
+        PackageManager.GET_META_DATA
+    )
+    val appIcon = packManager.getApplicationIcon(appInfo)
+
+    // convert drawable to bitmap
+    val appIconToBitmap = (appIcon as BitmapDrawable).toBitmap()
+
+    // convert bitmap to Image bitmap
+    return appIconToBitmap.asImageBitmap()
 }
 

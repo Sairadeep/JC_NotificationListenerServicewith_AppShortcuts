@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">JC Notification Listener Service</string>
+    <string name="insta_app_package">com.instagram.android</string>
+    <string name="whatsapp_app_package">com.whatsapp</string>
+    <string name="message_app_package">com.google.android.apps.messaging</string>
+    <string name="my_app_package">com.anxer.jcnotificationlistenerservice</string>
+    <string name="insta_app_name">Instagram</string>
+    <string name="whatsapp_app_name">Whatsapp</string>
+    <string name="message_app_name">Message</string>
+    <string name="my_app_name">JCLNS</string>
+    <string name="app_notify_message">You have a notification</string>
+    <string name="notification_posted_log">Notification Posted</string>
+    <string name="notification_removed_log">Notification Removed</string>
+    <string name="notification_posted_app">Notification Posted By</string>
+    <string name="notification_removed_app">Removed Notification of</string>
+    <string name="notification_badge_Count">Current Badge count</string>
+    <string name="shortcut_shortLabel">Open Repo</string>
+    <string name="shortcut_LongLabel">JCNLS repository link</string>
 </resources>

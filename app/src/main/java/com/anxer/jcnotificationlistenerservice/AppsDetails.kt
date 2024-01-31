@@ -4,35 +4,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun appDetails(): SnapshotStateList<AppsList> {
 
+    val myContext = LocalContext.current
+
+
     val appNotificationDetails = remember {
         mutableStateListOf(
             AppsList(
-                appName = "Instagram",
-                appPackage = "com.instagram.android",
-                appIcon = R.drawable.insta,
-                appMessage = "You have a notification from Instagram"
+                appName = myContext.getString(R.string.insta_app_name),
+                appPackage = myContext.getString(R.string.insta_app_package),
+                appMessage = "${myContext.getString(R.string.app_notify_message)} ${myContext.getString(R.string.insta_app_name)}"
             ),
             AppsList(
-                appName = "Whatsapp",
-                appPackage = "com.whatsapp",
-                appIcon = R.drawable.whatsapp,
-                appMessage = "You have a notification from Whatsapp"
+                appName = myContext.getString(R.string.whatsapp_app_name),
+                appPackage = myContext.getString(R.string.whatsapp_app_package),
+                appMessage = "${myContext.getString(R.string.app_notify_message)} ${myContext.getString(R.string.whatsapp_app_name)}"
             ),
             AppsList(
-                appName = "Messages",
-                appPackage = "com.google.android.apps.messaging",
-                appIcon = R.drawable.baseline_message_24,
-                appMessage = "You have a notification from Messages app"
+                appName = myContext.getString(R.string.message_app_name),
+                appPackage = myContext.getString(R.string.message_app_package),
+                appMessage = "${myContext.getString(R.string.app_notify_message)} ${myContext.getString(R.string.message_app_name)}"
             ),
             AppsList(
-                appName = "Notification Badge",
-                appPackage = "com.anxer.notificationbadge",
-                appIcon = R.drawable.baseline_notifications_24,
-                appMessage = "You have notification from other apps."
+                appName = myContext.getString(R.string.my_app_name),
+                appPackage = myContext.getString(R.string.my_app_package),
+                appMessage = "${myContext.getString(R.string.app_notify_message)} ${myContext.getString(R.string.my_app_name)}"
             )
         )
     }
