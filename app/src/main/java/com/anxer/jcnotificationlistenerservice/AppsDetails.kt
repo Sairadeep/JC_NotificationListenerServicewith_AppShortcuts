@@ -11,7 +11,6 @@ fun appDetails(): SnapshotStateList<AppsList> {
 
     val myContext = LocalContext.current
 
-
     val appNotificationDetails = remember {
         mutableStateListOf(
             AppsList(

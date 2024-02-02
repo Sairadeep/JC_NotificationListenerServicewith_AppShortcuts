@@ -242,6 +242,8 @@ private fun Shortcut(myContext: Context) {
     val shortCut = ShortcutInfoCompat.Builder(myContext, "shortCut1")
         .setShortLabel(stringResource(id = R.string.shortcut_shortLabel))
         .setLongLabel(stringResource(id = R.string.shortcut_LongLabel)).setRank(1)
+        // Need to add dynamic shortcuts with capabilities.
+        // .addCapabilityBinding(Intent.ACTION_VIEW)
         .setIcon(
             IconCompat.createWithResource(myContext, R.drawable.baseline_web_24)
         ).setIntent(
