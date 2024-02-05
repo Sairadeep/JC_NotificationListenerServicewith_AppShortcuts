@@ -10,8 +10,6 @@ import androidx.compose.runtime.mutableIntStateOf
 
 class NotificationService : NotificationListenerService() {
 
-    // private lateinit var sharedPreferences: SharedPreferences
-
     @SuppressLint("QueryPermissionsNeeded")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onNotificationPosted(sbn: StatusBarNotification) {

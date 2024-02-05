@@ -63,15 +63,14 @@ import com.anxer.jcnotificationlistenerservice.ui.theme.JCNotificationListenerSe
 class MainActivity : ComponentActivity() {
 
     private val listenerComponent =
-        ComponentName("${R.string.my_app_package}", "NotificationService")
-    private var permissionGranted = false
+        ComponentName(
+            "com.anxer.jcnotificationlistenerservice",
+            "com.anxer.jcnotificationlistenerservice.NotificationService"
+        )
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val isPermissionGranted = checkNotificationListenerPermission(this, listenerComponent)
-
         setContent {
             JCNotificationListenerServiceTheme {
                 // A surface container using the 'background' color from the theme
@@ -84,14 +83,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        if (!isPermissionGranted && !permissionGranted) {
+        val isPermissionGranted = checkNotificationListenerPermission(this, listenerComponent)
+        // Toast.makeText(this, "$isPermissionGranted", Toast.LENGTH_SHORT).show()
+        if (!isPermissionGranted) {
             val permissionIntentLaunch =
                 Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
             this.startActivity(permissionIntentLaunch)
-            permissionGranted = true
+        } else {
+            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
         }
     }
 }
+
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,7 +110,7 @@ fun JCNLS() {
     val notifiedAppDetails = appDetails()
     val textOnNotified = remember { mutableStateOf(false) }
 
-    Toast.makeText(myContext, myContext.getString(R.string.my_app_name), Toast.LENGTH_SHORT).show()
+    // Toast.makeText(myContext, myContext.getString(R.string.my_app_name), Toast.LENGTH_SHORT).show()
 
     Scaffold(
         topBar = {
@@ -259,13 +262,24 @@ private fun Shortcut(myContext: Context) {
     )
 }
 
-
 fun checkNotificationListenerPermission(
     context: Context,
     listenerComponent: ComponentName
 ): Boolean {
-    return Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
-        ?.contains(listenerComponent.flattenToString()) == true
+    val enabledListeners =
+        Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
+
+    Log.d("ABCGS", "Enabled: $enabledListeners")
+
+    Log.d("ABCGS", listenerComponent.flattenToString())
+
+    val checkPermission =
+        enabledListeners?.split(":")
+            ?.contains(listenerComponent.flattenToString()) == true
+
+    Log.d("ABCGS", "$checkPermission")
+
+    return checkPermission
 }
 
 fun imageFetchBitmap(context: Context, packName: String): ImageBitmap {
