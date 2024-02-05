@@ -84,7 +84,6 @@ class MainActivity : ComponentActivity() {
             }
         }
         val isPermissionGranted = checkNotificationListenerPermission(this, listenerComponent)
-        // Toast.makeText(this, "$isPermissionGranted", Toast.LENGTH_SHORT).show()
         if (!isPermissionGranted) {
             val permissionIntentLaunch =
                 Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
@@ -101,7 +100,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 @Preview(showBackground = true)
 fun JCNLS() {
-
     val badgeCount = remember { mutableStateOf("Dummy") }
     val aIBtoIB = remember {
         mutableStateOf<ImageBitmap?>(null)
@@ -109,9 +107,6 @@ fun JCNLS() {
     val myContext = LocalContext.current
     val notifiedAppDetails = appDetails()
     val textOnNotified = remember { mutableStateOf(false) }
-
-    // Toast.makeText(myContext, myContext.getString(R.string.my_app_name), Toast.LENGTH_SHORT).show()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -136,8 +131,6 @@ fun JCNLS() {
                     count = 4,
                     itemContent = { index ->
                         val nta = notifiedAppDetails[index]
-
-
                         Card(
                             modifier = Modifier
                                 .height(350.dp)
@@ -268,17 +261,12 @@ fun checkNotificationListenerPermission(
 ): Boolean {
     val enabledListeners =
         Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
-
     Log.d("ABCGS", "Enabled: $enabledListeners")
-
     Log.d("ABCGS", listenerComponent.flattenToString())
-
     val checkPermission =
         enabledListeners?.split(":")
             ?.contains(listenerComponent.flattenToString()) == true
-
     Log.d("ABCGS", "$checkPermission")
-
     return checkPermission
 }
 

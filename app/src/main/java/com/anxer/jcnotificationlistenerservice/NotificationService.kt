@@ -14,8 +14,6 @@ class NotificationService : NotificationListenerService() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
-        // saveNotificationCount()
-
         when (sbn.packageName) {
             this.getString(R.string.insta_app_package) -> {
                 Utils.setInstaBadgeCount(sbn.notification.number)
@@ -73,7 +71,7 @@ class NotificationService : NotificationListenerService() {
                 Utils.setInstaBadgeCount(0)
                 Log.d(
                     this.getString(R.string.notification_removed_log),
-                    "${this.getString(R.string.notification_removed_app)} ${sbn.packageName.length} ${this.getString(R.string.notification_badge_Count)} ${Utils.getInstaBadgeCount()}"
+                    "${this.getString(R.string.notification_removed_app)} ${sbn.packageName} ${this.getString(R.string.notification_badge_Count)} ${Utils.getInstaBadgeCount()}"
                 )
             }
 
